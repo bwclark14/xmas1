@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christmas Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #002b5c;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #8b0000;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .answer {
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .answer:hover {
+            background-color: #ff7f00;
+        }
+
+        .message {
+            font-size: 1.5rem;
+            margin-top: 20px;
+        }
+
+        .restart {
+            display: none;
+            margin-top: 20px;
+            background-color: #00bcd4;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .restart.visible {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Christmas Quiz</h1>
+        <div id="quiz">
+            <div class="question" id="question">Question text will go here</div>
+            <div class="answers" id="answers">
+                <!-- Answer buttons will go here -->
+            </div>
+        </div>
+        <div class="message" id="message"></div>
+        <button class="restart" id="restart">Restart</button>
+    </div>
+
+    <script>
+        const questions = [
+            { question: "What is the name of the reindeer with a glowing red nose?", answers: ["Dasher", "Cupid", "Rudolph", "Blitzen"], correct: "Rudolph" },
+            { question: "What drink is typically left out for Santa on Christmas Eve?", answers: ["Milk", "Wine", "Soda", "Tea"], correct: "Milk" },
+            { question: "What do people traditionally put on top of a Christmas tree?", answers: ["Star", "Ornaments", "Candy Canes", "Wreath"], correct: "Star" },
+            { question: "What color is the Grinch?", answers: ["Blue", "Green", "Red", "Yellow"], correct: "Green" },
+            { question: "In the song '12 Days of Christmas,' what is given on the 5th day?", answers: ["Golden Rings", "Drummers Drumming", "French Hens", "Calling Birds"], correct: "Golden Rings" },
+            { question: "What is Frosty the Snowman's nose made of?", answers: ["Carrot", "Button", "Coal", "Stick"], correct: "Button" },
+            { question: "Where was baby Jesus born?", answers: ["Nazareth", "Jerusalem", "Bethlehem", "Egypt"], correct: "Bethlehem" },
+            { question: "What is the name of the ballet performed at Christmas?", answers: ["Swan Lake", "The Nutcracker", "Sleeping Beauty", "Cinderella"], correct: "The Nutcracker" }
+        ];
+
+        let currentQuestion = 0;
+
+        const questionElement = document.getElementById("question");
+        const answersElement = document.getElementById("answers");
+        const messageElement = document.getElementById("message");
+        const restartButton = document.getElementById("restart");
+
+        function loadQuestion() {
+            const questionData = questions[currentQuestion];
+            questionElement.textContent = questionData.question;
+            answersElement.innerHTML = "";
+
+            questionData.answers.forEach(answer => {
+                const button = document.createElement("button");
+                button.textContent = answer;
+                button.className = "answer";
+                button.onclick = () => checkAnswer(answer);
+                answersElement.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedAnswer) {
+            const correctAnswer = questions[currentQuestion].correct;
+            if (selectedAnswer === correctAnswer) {
+                currentQuestion++;
+                if (currentQuestion === questions.length) {
+                    messageElement.textContent = "Congratulations! You've answered all questions correctly!";
+                    answersElement.innerHTML = "";
+                    restartButton.classList.add("visible");
+                } else {
+                    loadQuestion();
+                }
+            } else {
+                messageElement.textContent = "Wrong answer! Try again!";
+                restartButton.classList.add("visible");
+            }
+        }
+
+        restartButton.onclick = () => {
+            currentQuestion = 0;
+            messageElement.textContent = "";
+            restartButton.classList.remove("visible");
+            loadQuestion();
+        };
+
+        loadQuestion();
+    </script>
+</body>
+</html>
